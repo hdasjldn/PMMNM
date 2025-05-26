@@ -1,73 +1,72 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thêm sản phẩm</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .form-container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .error-list {
-            color: #dc3545;
-            margin-bottom: 15px;
-        }
-        .form-label {
-            font-weight: bold;
-        }
-    </style>
-    <script>
-        function validateForm() {
-            let name = document.getElementById('name').value;
-            let price = document.getElementById('price').value;
-            let errors = [];
-            if (name.length < 10 || name.length > 100) {
-                errors.push('Tên sản phẩm phải có từ 10 đến 100 ký tự.');
-            }
-            if (price <= 0 || isNaN(price)) {
-                errors.push('Giá phải là một số dương lớn hơn 0.');
-            }
-            if (errors.length > 0) {
-                alert(errors.join('\n'));
-                return false;
-            }
-            return true;
-        }
-    </script>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-center my-4">Thêm sản phẩm mới</h1>
-        <div class="form-container">
-            <?php if (!empty($errors)): ?>
-                <ul class="list-unstyled error-list">
-                    <?php foreach ($errors as $error): ?>
-                        <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-            <form method="POST" action="/project1/Product/add" onsubmit="return validateForm();">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Tên sản phẩm:</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Mô tả:</label>
-                    <textarea id="description" name="description" class="form-control" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="price" class="form-label">Giá:</label>
-                    <input type="number" id="price" name="price" step="0.01" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
-            </form>
-            <a href="/project1/Product/list" class="btn btn-secondary mt-3">Quay lại danh sách sản phẩm</a>
+<?php include 'app/views/shares/header.php'; ?>
+
+
+<div class="card container my-3">
+    <div class="card-header row">
+        <div class="col-10">
+            <h1>Thêm Sản Phẩm</h1>
+        </div>
+        <div class="col-2">
+            <a href="/project1/product" class="btn btn-success">Quay về</a>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <div class="card-body">
+        <form action="/project1/product/SaveAdd" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Tên Thể Sản Phẩm</label>
+                <input name="name" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Giá Sản Phẩm</label>
+                <input name="price" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Hình Ảnh</label>
+                <input id="AnhVuaTai" type="file" name="hinhanh" class="form-control">
+                <div class="ChuaAnh"></div>
+
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Thể Loại Sản Phẩm</label>
+                <select name='categoryid' class="form-control">
+                    <?php if ($theloai != null): ?>
+                        <?php foreach ($theloai as $i): ?>
+                            <option value="<?php echo htmlspecialchars($i->id) ?>"><?php echo htmlspecialchars($i->name) ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mô Tả</label>
+                <!-- <input name="des" class="form-control"> -->
+                <textarea name="des" class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Thêm</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    var anh = document.querySelector("#AnhVuaTai");
+    anh.addEventListener('change', function(e) {
+        let a = e.target.files[0]; // lấy thằng file đầu tiên
+        if (a != null) {
+            document.querySelector(".ChuaAnh").innerHTML = ""; // Xóa hình ảnh cũ
+            let path = URL.createObjectURL(a) // lấy ra địa chỉ
+
+            let hinhanhthem = document.createElement('img');
+
+            hinhanhthem.setAttribute('src', path);
+            hinhanhthem.style.width = "100px";
+            hinhanhthem.style.height = "100px";
+            hinhanhthem.classList.add('my-2');
+
+            document.querySelector(".ChuaAnh").appendChild(hinhanhthem);
+        }
+    });
+</script>
+<?php include 'app/views/shares/footer.php'; ?>

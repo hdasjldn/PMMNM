@@ -209,10 +209,10 @@
                         <div class="card-footer action-buttons">
                             <p class="price-tag">Giá: <?php echo number_format($product->getPrice(), 0, ',', '.') . ' VND'; ?></p>
                             <div class="action-buttons">
-                                <a href="/project1/Product/edit/<?php echo $product->getID(); ?>" class="btn btn-outline-primary btn-custom btn-sm">
+                                <a href="/project1/product/edit/<?php echo $product->getID(); ?>" class="btn btn-outline-primary btn-custom btn-sm">
                                     <i class="bi bi-pencil me-1"></i> Sửa
                                 </a>
-                                <a href="/project1/Product/delete/<?php echo $product->getID(); ?>" 
+                                <a href="/project1/product/delete/<?php echo $product->getID(); ?>" 
                                    class="btn btn-outline-danger btn-custom btn-sm" 
                                    onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                                     <i class="bi bi-trash me-1"></i> Xóa
