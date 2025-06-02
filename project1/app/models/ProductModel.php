@@ -85,6 +85,7 @@ class ProductModel
     {
         $this->category_id = (int) $category_id; // Ensure category_id is an integer
     }
+    
 
     // Database interaction methods
     public function DanhSachSanPham()
@@ -101,27 +102,27 @@ class ProductModel
         return $result;
     }
 
-public function LaySanPhamTheoID($id)
-{
-    $query = "
-        SELECT p.*, c.name AS category_name
-        FROM {$this->table_name} p
-        LEFT JOIN category c ON p.category_id = c.id
-        WHERE p.id = :id
-        LIMIT 1
-    ";
+    public function LaySanPhamTheoID($id)
+    {
+        $query = "
+            SELECT p.*, c.name AS category_name
+            FROM {$this->table_name} p
+            LEFT JOIN category c ON p.category_id = c.id
+            WHERE p.id = :id
+            LIMIT 1
+        ";
 
-    $stmt = $this->db->prepare($query);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_OBJ);
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-    if ($result) {
-        $result->price = (float) $result->price; // Cast price to float
-        $result->stock = $result->stock ?? 0; // Default stock to 0 if not set
+        if ($result) {
+            $result->price = (float) $result->price; // Cast price to float
+            $result->stock = $result->stock ?? 0; // Default stock to 0 if not set
+        }
+        return $result;
     }
-    return $result;
-}
 
     public function ThemSanPham($name, $price, $description, $category_id, $image = null)
     {
@@ -231,5 +232,6 @@ public function LaySanPhamTheoID($id)
         }
         return false;
     }
+    
 }
 ?>

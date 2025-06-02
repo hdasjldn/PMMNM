@@ -153,9 +153,21 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        .dropdown-menu {
+            border: 1px solid var(--light-color);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .dropdown-item:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
     </style>
 </head>
 <body>
+    <!-- Notification Area -->
+    <div id="notification-area" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
         <div class="container">
@@ -174,20 +186,37 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/project1/Category">Danh mục</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Giới thiệu</a>
-                    </li>
+                    </li> -->
                 </ul>
                 <div class="d-flex align-items-center">
-                    <div class="input-group me-3" style="width: 250px;">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm...">
-                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                    <!-- <form class="input-group me-3" style="width: 250px;" action="/project1/product/search" method="GET">
+                        <input type="text" class="form-control" name="query" placeholder="Tìm kiếm...">
+                        <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                    </form> -->
+                    <div class="dropdown me-2">
+                        <?php if (SessionHelper::isLoggedIn()): ?>
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i><?php echo htmlspecialchars($_SESSION['username']); ?>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <!-- <li><a class="dropdown-item" href="/project1/account/profile">Hồ sơ</a></li> -->
+                                <?php if (SessionHelper::isAdmin()): ?>
+                                    <!-- <li><a class="dropdown-item" href="/project1/product/add">Thêm sản phẩm</a></li> -->
+                                <?php endif; ?>
+                                <li><a class="dropdown-item" href="/project1/account/logout">Đăng xuất</a></li>
+                            </ul>
+                        <?php else: ?>
+                            <a class="btn btn-outline-primary" href="/project1/account/login"><i class="fas fa-user me-1"></i>Đăng nhập</a>
+                        <?php endif; ?>
                     </div>
-                    <button class="btn btn-outline-primary me-2"><i class="fas fa-user"></i></button>
                     <button class="btn btn-outline-primary me-2"><i class="fas fa-heart"></i></button>
                     <button class="btn btn-outline-primary position-relative">
                         <a class="fas fa-shopping-cart" href="/project1/product/cart/"></a>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?php echo isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0; ?>
+                        </span>
                     </button>
                 </div>
             </div>
